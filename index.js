@@ -2,6 +2,8 @@ const express = require('express');
 const fs = require('fs');
 const morgan = require('morgan');
 const path = require('path');
+const bodyParser = require('body-parser');
+const uuid = require('uuid');
 const app = express();
 
 let movies = [
