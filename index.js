@@ -1,9 +1,10 @@
 const express = require('express');
-const fs = require('fs');
-const morgan = require('morgan');
-const path = require('path');
-const bodyParser = require('body-parser');
-const uuid = require('uuid');
+fs = require('fs');
+morgan = require('morgan');
+path = require('path');
+bodyParser = require('body-parser');
+uuid = require('uuid');
+
 const app = express();
 
 let movies = [
@@ -88,6 +89,8 @@ let movies = [
         featuring: true,
     },
 ];
+
+let users = [];
 
 //creating a log file
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
