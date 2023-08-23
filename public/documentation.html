@@ -4,9 +4,131 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Movie app</title>
+
+        <link rel="stylesheet" href="styles.css" />
     </head>
     <body>
-        <h3>Movie api project</h3>
-        <p>Work in progress....</p>
+        <h3>API documentation for movie app</h3>
+        <p>
+            This is backend side of the My Flix App. Application is used to show
+            data, such as: title, genre, director, description... Users are able
+            to create, delete and update account, add favorite movies and change
+            them.
+        </p>
+
+        <table class="mainTable">
+            <thead>
+                <tr>
+                    <td>Action</td>
+                    <td>URL</td>
+                    <td>HTTP Method</td>
+                    <td>Path Variables</td>
+                    <td>Request body data format in JSON</td>
+                    <td>Response body data format in JSON</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Allow new users to register</td>
+                    <td>/users</td>
+                    <td>POST / CREATE</td>
+                    <td>None</td>
+                    <td>{ "name": "Joe", "topMovies":[] }</td>
+                    <td>{ "name": "Joe", "topMovies":[] }</td>
+                </tr>
+                <tr>
+                    <td>
+                        Allow users to add a movie to their list of favorites
+                    </td>
+                    <td>/users/:id/:movieTitle</td>
+                    <td>POST / CREATE</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>
+                        Returns message to inform movie is added to the list
+                    </td>
+                </tr>
+                <tr>
+                    <td>Return a list of All users</td>
+                    <td>/users</td>
+                    <td>GET / READ</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>Returns a list of an array of all users</td>
+                </tr>
+
+                <tr>
+                    <td>Return a list of All movies to the user</td>
+                    <td>/movies</td>
+                    <td>GET / READ</td>
+                    <td>None</td>
+                    <td>None</td>
+                    <td>Returns an array of All movies</td>
+                </tr>
+                <tr>
+                    <td>
+                        Return data about a single movie by title to the user
+                    </td>
+                    <td>/movies/:title</td>
+                    <td>GET / READ</td>
+                    <td>Title: Goodfellas</td>
+                    <td>None</td>
+                    <td>
+                        { "title": "Goodfellas", "genre": "Biography, Crime,
+                        Drama", "description": "The story of Henry Hill and his
+                        life in the mob, covering his relationship with his wife
+                        and his mob partners.", "director": "Martin Scorsese",
+                        "featuring": true }
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Return data about a genre by name</td>
+                    <td>/movies/genres/:genre</td>
+                    <td>GET / READ</td>
+                    <td>Name: Action</td>
+                    <td>None</td>
+                    <td>"Action"</td>
+                </tr>
+
+                <tr>
+                    <td>Return data about a director by name</td>
+                    <td>/directors/:director</td>
+                    <td>GET / READ</td>
+                    <td>Name: Christopher Nolan</td>
+                    <td>None</td>
+                    <td>"Christopher Nolan"</td>
+                </tr>
+                <tr>
+                    <td>Allow users to update their info by username</td>
+                    <td>/users/:id</td>
+                    <td>PUT / UPDATE</td>
+                    <td>Id: 2</td>
+                    <td>{ "name": "updated name Mark", "topMovies":[] }</td>
+                    <td>{ "name": "updated name Mark", "topMovies":[] }</td>
+                </tr>
+                <tr>
+                    <td>
+                        Allow users to remove a movie from their list of
+                        favorites
+                    </td>
+                    <td>/users/:id/:title</td>
+                    <td>DELETE / DELETE</td>
+                    <td>Id: 2, title: Goodfellas</td>
+                    <td>None</td>
+                    <td>
+                        Goodfellas has been removed from user 2's top movies
+                    </td>
+                </tr>
+                <tr>
+                    <td>Allow users to delete the account</td>
+                    <td>/users/:id</td>
+                    <td>DELETE / DELETE</td>
+                    <td>id: 1</td>
+                    <td>None</td>
+                    <td>User {name} with id {id} is deleted.</td>
+                </tr>
+            </tbody>
+        </table>
     </body>
 </html>

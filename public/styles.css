@@ -1,0 +1,9 @@
+
+
+table, th, td {
+    border: 1px solid #d3d3d3;
+  }
+
+  tr:nth-child(even) {
+    background-color: #D6EEEE;
+  }
