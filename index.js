@@ -1,9 +1,9 @@
-const express = require('express');
-fs = require('fs');
-morgan = require('morgan');
-path = require('path');
-bodyParser = require('body-parser');
-uuid = require('uuid');
+const express = require('express'),
+    fs = require('fs'),
+    morgan = require('morgan'),
+    path = require('path'),
+    bodyParser = require('body-parser'),
+    uuid = require('uuid');
 
 const app = express();
 
@@ -90,7 +90,10 @@ let movies = [
     },
 ];
 
-let users = [];
+let users = [
+    { id: 1, name: 'Mark', topMovies: [] },
+    { id: 2, name: 'John', topMovies: [] },
+];
 
 //creating a log file
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
@@ -100,11 +103,27 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
 //morgan middleware setup
 app.use(morgan('combined', { stream: accessLogStream }));
 
+//middleware to use req.body
+app.use(bodyParser.json());
+
 //serving static page
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
     res.send('Hi, this is homepage for the movie app... Welcome!');
+});
+
+//CREATE
+app.post('/users', (req, res) => {
+    const newUser = req.body;
+
+    if (newUser.name) {
+        newUser.id = uuid.v4;
+        users.push(newUser);
+        res.status(201).json(newUser);
+    } else {
+        res.status(400).send('User name is required');
+    }
 });
 
 //READ
