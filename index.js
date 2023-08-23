@@ -92,7 +92,7 @@ let movies = [
 
 let users = [
     { id: 1, name: 'Mark', topMovies: [] },
-    { id: 2, name: 'John', topMovies: [] },
+    { id: 2, name: 'John', topMovies: ['Goodfellas'] },
 ];
 
 //creating a log file
@@ -123,6 +123,67 @@ app.post('/users', (req, res) => {
         res.status(201).json(newUser);
     } else {
         res.status(400).send('User name is required');
+    }
+});
+
+//UPDATE
+app.put('/users/:id', (req, res) => {
+    const { id } = req.params;
+    const updatedUser = req.body;
+
+    let user = users.find((user) => user.id == id);
+
+    if (user) {
+        user.name = updatedUser.name;
+        res.status(200).json(user);
+    } else {
+        res.status(400).send('User not found');
+    }
+});
+
+//POST
+app.post('/users/:id/:movieTitle', (req, res) => {
+    const { id, movieTitle } = req.params;
+
+    let user = users.find((user) => user.id == id);
+
+    if (user) {
+        user.topMovies.push(movieTitle);
+        res.status(200).send(
+            `${movieTitle} has been added to user ${id}'s top movies`
+        );
+    } else {
+        res.status(400).send('User not found');
+    }
+});
+
+//DELETE
+app.delete('/users/:id/:movieTitle', (req, res) => {
+    const { id, movieTitle } = req.params;
+
+    let user = users.find((user) => user.id == id);
+
+    if (user) {
+        user.topMovies = user.topMovies.filter((title) => title !== movieTitle);
+        res.status(200).send(
+            `${movieTitle} has been removed from user ${id}'s top movies`
+        );
+    } else {
+        res.status(400).send('User not found');
+    }
+});
+
+//DELETE
+app.delete('/users/:id/', (req, res) => {
+    const { id } = req.params;
+
+    let user = users.find((user) => user.id == id);
+
+    if (user) {
+        users = users.filter((user) => user.id != id);
+        res.status(200).send(`user ${id} has been removed`);
+    } else {
+        res.status(400).send('User not found');
     }
 });
 
