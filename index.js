@@ -133,6 +133,18 @@ app.get('/movies/directors/:director', (req, res) => {
     }
 });
 
+//READ
+app.get('/movies/genres/:genre', (req, res) => {
+    const { genre } = req.params;
+    const movie = movies.find((movie) => movie.genre === genre);
+
+    if (movie) {
+        res.status(200).json(movie.genre);
+    } else {
+        res.status(400).send('No such genre.');
+    }
+});
+
 //error handling
 app.use((err, req, res, next) => {
     console.error(err.stack);
