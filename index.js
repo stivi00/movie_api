@@ -5,7 +5,22 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     uuid = require('uuid');
 
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+
+const Movies = Models.Movie;
+const Users = Models.User;
+
 const app = express();
+
+//middleware to use req.body
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // not sure why this
+
+mongoose.connect('mongodb://localhost:27017/test', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 let movies = [
     {
@@ -102,9 +117,6 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
 
 //morgan middleware setup
 app.use(morgan('combined', { stream: accessLogStream }));
-
-//middleware to use req.body
-app.use(bodyParser.json());
 
 //serving static page
 app.use(express.static('public'));
