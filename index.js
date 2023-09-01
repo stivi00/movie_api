@@ -23,89 +23,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/test', {
     useUnifiedTopology: true,
 });
 
-let movies = [
-    {
-        title: 'The Shawshank Redemption',
-        genre: 'Drama',
-        description:
-            'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.',
-        director: 'Frank Darabont',
-        featuring: false,
-    },
-    {
-        title: 'The Godfather',
-        genre: 'Crime, Drama',
-        description:
-            'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.',
-        director: 'Francis Ford Coppola',
-        featuring: false,
-    },
-    {
-        title: 'The Dark Knight',
-        genre: 'Action, Crime, Drama',
-        description:
-            'When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham.',
-        director: 'Christopher Nolan',
-        featuring: true,
-    },
-    {
-        title: 'Pulp Fiction',
-        genre: 'Crime, Drama',
-        description:
-            "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
-        director: 'Quentin Tarantino',
-        featuring: true,
-    },
-    {
-        title: 'The Lord of the Rings: The Return of the King',
-        genre: 'Adventure, Drama, Fantasy',
-        description:
-            "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.",
-        director: 'Peter Jackson',
-        featuring: true,
-    },
-    {
-        title: 'Forrest Gump',
-        genre: 'Drama, Romance',
-        description:
-            'The presidencies of Kennedy and Johnson, the events of Vietnam, Watergate, and other historical events unfold through the perspective of an Alabama man with an IQ of 75.',
-        director: 'Robert Zemeckis',
-        featuring: false,
-    },
-    {
-        title: 'Inception',
-        genre: 'Action, Adventure, Sci-Fi',
-        description:
-            'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.',
-        director: 'Christopher Nolan',
-        featuring: false,
-    },
-    {
-        title: 'Fight Club',
-        genre: 'Drama',
-        description:
-            'An insomniac office worker and a devil-may-care soapmaker form an underground fight club that evolves into something much, much more.',
-        director: 'David Fincher',
-        featuring: true,
-    },
-    {
-        title: 'The Matrix',
-        genre: 'Action, Sci-Fi',
-        description:
-            'A computer programmer discovers a mysterious underground world of mind-bending reality.',
-        director: 'Lana Wachowski, Lilly Wachowski',
-        featuring: false,
-    },
-    {
-        title: 'Goodfellas',
-        genre: 'Biography, Crime, Drama',
-        description:
-            'The story of Henry Hill and his life in the mob, covering his relationship with his wife and his mob partners.',
-        director: 'Martin Scorsese',
-        featuring: true,
-    },
-];
-
 //creating a log file
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
     flags: 'a',
@@ -198,20 +115,22 @@ app.put('/users/:Username', async (req, res) => {
         });
 });
 
-//POST
-app.post('/users/:id/:movieTitle', (req, res) => {
-    const { id, movieTitle } = req.params;
-
-    let user = users.find((user) => user.id == id);
-
-    if (user) {
-        user.topMovies.push(movieTitle);
-        res.status(200).send(
-            `${movieTitle} has been added to user ${id}'s top movies`
-        );
-    } else {
-        res.status(400).send('User not found');
-    }
+//POST - add a movie to a user's fav list
+app.post('/users/:Username/movies/:MovieID', async (req, res) => {
+    await Users.findOneAndUpdate(
+        { Username: req.params.Username },
+        {
+            $push: { FavoriteMovies: req.params.MovieID },
+        },
+        { new: true }
+    ) // This line makes sure that the updated document is returned
+        .then((updatedUser) => {
+            res.json(updatedUser);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
 //DELETE

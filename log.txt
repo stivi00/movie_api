@@ -168,3 +168,7 @@ Timestamp: Sun Aug 13 2023 16:58:43 GMT+0200 (Central European Summer Time)
 ::1 - - [01/Sep/2023:07:59:18 +0000] "GET /users/user2 HTTP/1.1" 201 4 "-" "PostmanRuntime/7.32.3"
 ::1 - - [01/Sep/2023:08:00:04 +0000] "POST /users/ HTTP/1.1" 201 125 "-" "PostmanRuntime/7.32.3"
 ::1 - - [01/Sep/2023:08:00:20 +0000] "PUT /users/test HTTP/1.1" 200 131 "-" "PostmanRuntime/7.32.3"
+::1 - - [01/Sep/2023:08:17:08 +0000] "PUT /users/Joe/movies/64ef614e860648d08d42feec HTTP/1.1" 404 180 "-" "PostmanRuntime/7.32.3"
+::1 - - [01/Sep/2023:08:18:51 +0000] "GET /users/Joe/movies/64ef614e860648d08d42feec HTTP/1.1" 404 180 "-" "PostmanRuntime/7.32.3"
+::1 - - [01/Sep/2023:08:18:58 +0000] "POST /users/Joe/movies/64ef614e860648d08d42feec HTTP/1.1" 200 149 "-" "PostmanRuntime/7.32.3"
+::1 - - [01/Sep/2023:08:19:16 +0000] "POST /users/Joe/movies/isntoeo HTTP/1.1" 500 123 "-" "PostmanRuntime/7.32.3"
