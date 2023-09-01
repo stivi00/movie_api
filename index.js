@@ -188,27 +188,28 @@ app.get('/movies/:Title', async (req, res) => {
 });
 
 //READ
-app.get('/movies/directors/:director', (req, res) => {
-    const { director } = req.params;
-    const movie = movies.find((movie) => movie.director === director);
-
-    if (movie) {
-        res.status(200).json(movie.director);
-    } else {
-        res.status(400).send('No such director.');
-    }
+app.get('/movies/directors/:Director', async (req, res) => {
+    await Movies.findOne({ 'Director.Name': req.params.Director })
+        .then((movie) => {
+            res.status(201).json(movie.Director);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error ' + err);
+        });
 });
 
 //READ
-app.get('/movies/genres/:genre', (req, res) => {
-    const { genre } = req.params;
-    const movie = movies.find((movie) => movie.genre === genre);
-
-    if (movie) {
-        res.status(200).json(movie.genre);
-    } else {
-        res.status(400).send('No such genre.');
-    }
+app.get('/movies/genres/:genreName', async (req, res) => {
+    await Movies.findOne({ 'Genre.Name': req.params.genreName })
+        .then((movie) => {
+            // this can be used to filter by genre
+            res.status(201).json(movie.Genre);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error ' + err);
+        });
 });
 
 //error handling
