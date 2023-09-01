@@ -33,19 +33,29 @@
                     <td>/users</td>
                     <td>POST / CREATE</td>
                     <td>None</td>
-                    <td>{ "name": "Joe", "topMovies":[] }</td>
-                    <td>{ "name": "Joe", "topMovies":[] }</td>
+                    <td>
+                        { "Username": "Steve", "Email": "steeeve@gmail.com",
+                        "Password": "123123" }
+                    </td>
+                    <td>
+                        { "Username": "Steve", "Password": "123123", "Email":
+                        "steeeve@gmail.com", "FavoriteMovies": [], "_id":
+                        "64f1b2ad01d91361a696959f", "__v": 0 }
+                    </td>
                 </tr>
                 <tr>
                     <td>
                         Allow users to add a movie to their list of favorites
                     </td>
-                    <td>/users/:id/:movieTitle</td>
+                    <td>/users/:Username/:movies/:MovieID</td>
                     <td>POST / CREATE</td>
                     <td>None</td>
                     <td>None</td>
                     <td>
-                        Returns message to inform movie is added to the list
+                        { "_id": "64f186668e98073f6e998723", "Username": "Joe",
+                        "Password": "123123", "Email": "joe@gmail.com",
+                        "FavoriteMovies": [ "64ef614e860648d08d42feec",
+                        "64ef614e860648d08d42fee5" ], "__v": 0 }
                     </td>
                 </tr>
                 <tr>
@@ -54,7 +64,7 @@
                     <td>GET / READ</td>
                     <td>None</td>
                     <td>None</td>
-                    <td>Returns a list of an array of all users</td>
+                    <td>Returns an array of ALL users in JSON format</td>
                 </tr>
 
                 <tr>
@@ -69,64 +79,94 @@
                     <td>
                         Return data about a single movie by title to the user
                     </td>
-                    <td>/movies/:title</td>
+                    <td>/movies/:Title</td>
                     <td>GET / READ</td>
-                    <td>Title: Goodfellas</td>
+                    <td>Title: Avatar</td>
                     <td>None</td>
                     <td>
-                        { "title": "Goodfellas", "genre": "Biography, Crime,
-                        Drama", "description": "The story of Henry Hill and his
-                        life in the mob, covering his relationship with his wife
-                        and his mob partners.", "director": "Martin Scorsese",
-                        "featuring": true }
+                        { "Genre": { "Name": "Science Fiction", "Description":
+                        "Science fiction film is a genre that explores
+                        imaginative and futuristic concepts often involving
+                        advanced science and technology." }, "Director": {
+                        "Name": "James Cameron", "Bio": "James Cameron is a
+                        Canadian film director, producer, and screenwriter.",
+                        "Birth": "1954", "Death": "" }, "Actors": [], "_id":
+                        "64ef614e860648d08d42feea", "Title": "Avatar",
+                        "Description": "A paraplegic marine is sent to the moon
+                        Pandora on a unique mission but becomes torn between his
+                        orders and protecting the world he feels is his home.",
+                        "ImagePath": "avatar.png", "Featured": true, "Bio":
+                        "James Cameron is a Canadian film director, producer and
+                        screenwriter." }
                     </td>
                 </tr>
 
                 <tr>
                     <td>Return data about a genre by name</td>
-                    <td>/movies/genres/:genre</td>
+                    <td>/movies/genres/:genreName</td>
                     <td>GET / READ</td>
-                    <td>Name: Action</td>
+                    <td>Name: Science%20Fiction</td>
                     <td>None</td>
-                    <td>"Action"</td>
+                    <td>
+                        { "Name": "Science Fiction", "Description": "Science
+                        fiction film is a genre that explores imaginative and
+                        futuristic concepts often involving advanced science and
+                        technology." }
+                    </td>
                 </tr>
 
                 <tr>
                     <td>Return data about a director by name</td>
-                    <td>/directors/:director</td>
+                    <td>/movies/directors/:Director</td>
                     <td>GET / READ</td>
-                    <td>Name: Christopher Nolan</td>
+                    <td>Name: Christopher%20Nolan</td>
                     <td>None</td>
-                    <td>"Christopher Nolan"</td>
+                    <td>
+                        { "Name": "Christopher Nolan", "Bio": "Christopher Nolan
+                        is a British-American film director, screenwriter, and
+                        producer.", "Birth": "1970", "Death": "" }
+                    </td>
                 </tr>
                 <tr>
                     <td>Allow users to update their info by username</td>
-                    <td>/users/:id</td>
+                    <td>/users/:Username</td>
                     <td>PUT / UPDATE</td>
-                    <td>Id: 2</td>
-                    <td>{ "name": "updated name Mark", "topMovies":[] }</td>
-                    <td>{ "name": "updated name Mark", "topMovies":[] }</td>
+                    <td>Username: Joe</td>
+                    <td>
+                        { "Username": "NewNameJoe", "Password": "newPasword",
+                        "Email": "neweee@eeve.com", "Birthday": "1977-08-09" }
+                    </td>
+                    <td>
+                        { "_id": "64f186668e98073f6e998723", "Username":
+                        "NewNameJoe", "Password": "newPasword", "Email":
+                        "neweee@eeve.com", "FavoriteMovies": [
+                        "64ef614e860648d08d42feec", "64ef614e860648d08d42fee5"
+                        ], "__v": 0 }
+                    </td>
                 </tr>
                 <tr>
                     <td>
                         Allow users to remove a movie from their list of
                         favorites
                     </td>
-                    <td>/users/:id/:title</td>
+                    <td>/users/:Username/:movies/MovieID</td>
                     <td>DELETE / DELETE</td>
-                    <td>Id: 2, title: Goodfellas</td>
+                    <td>MovieID: 64ef614e860648d08d42fee5</td>
                     <td>None</td>
                     <td>
-                        Goodfellas has been removed from user 2's top movies
+                        { "_id": "64f186668e98073f6e998723", "Username": "Joe",
+                        "Password": "123123", "Email": "joe@gmail.com",
+                        "FavoriteMovies": [ "64ef614e860648d08d42feec" ], "__v":
+                        0 }
                     </td>
                 </tr>
                 <tr>
                     <td>Allow users to delete the account</td>
-                    <td>/users/:id</td>
+                    <td>/users/:Username</td>
                     <td>DELETE / DELETE</td>
-                    <td>id: 1</td>
+                    <td>Username: Steve</td>
                     <td>None</td>
-                    <td>User {name} with id {id} is deleted.</td>
+                    <td>Steve was deleted.</td>
                 </tr>
             </tbody>
         </table>
