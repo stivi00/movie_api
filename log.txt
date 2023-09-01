@@ -153,3 +153,7 @@ Timestamp: Sun Aug 13 2023 16:58:43 GMT+0200 (Central European Summer Time)
 ::1 - - [31/Aug/2023:20:12:55 +0000] "POST /users/ HTTP/1.1" 500 82 "-" "PostmanRuntime/7.32.3"
 ::1 - - [31/Aug/2023:20:26:14 +0000] "POST /users/ HTTP/1.1" 500 55 "-" "PostmanRuntime/7.32.3"
 ::1 - - [01/Sep/2023:06:36:22 +0000] "POST /users/ HTTP/1.1" 201 123 "-" "PostmanRuntime/7.32.3"
+::1 - - [01/Sep/2023:06:48:11 +0000] "GET /users/ HTTP/1.1" 500 41 "-" "PostmanRuntime/7.32.3"
+::1 - - [01/Sep/2023:06:48:28 +0000] "GET /users/ HTTP/1.1" 201 845 "-" "PostmanRuntime/7.32.3"
+::1 - - [01/Sep/2023:07:25:03 +0000] "GET /users/:Joe HTTP/1.1" 201 4 "-" "PostmanRuntime/7.32.3"
+::1 - - [01/Sep/2023:07:25:17 +0000] "GET /users/Joe HTTP/1.1" 201 123 "-" "PostmanRuntime/7.32.3"

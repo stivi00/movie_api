@@ -152,10 +152,28 @@ app.post('/users', async (req, res) => {
 });
 
 //READ USERS
+app.get('/users', async (req, res) => {
+    await Users.find()
+        .then((user) => {
+            res.status(201).json(user);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error ' + err);
+        });
+});
 
-// app.get('/users', async(req, res)=>{
-//     await
-// })
+//READ ONE USER
+app.get('/users/:Username', async (req, res) => {
+    await Users.findOne({ Username: req.params.Username })
+        .then((user) => {
+            res.status(201).json(user);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error ' + err);
+        });
+});
 
 //UPDATE
 app.put('/users/:id', (req, res) => {
