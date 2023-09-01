@@ -176,15 +176,15 @@ app.get('/movies', async (req, res) => {
 });
 
 //READ
-app.get('/movies/:title', (req, res) => {
-    const { title } = req.params;
-    const movie = movies.find((movie) => movie.title === title);
-
-    if (movie) {
-        res.status(200).json(movie);
-    } else {
-        res.status(400).send('No such movie.');
-    }
+app.get('/movies/:Title', async (req, res) => {
+    await Movies.findOne({ Title: req.params.Title })
+        .then((movie) => {
+            res.status(201).json(movie);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error ' + err);
+        });
 });
 
 //READ
