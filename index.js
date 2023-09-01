@@ -166,8 +166,13 @@ app.delete('/users/:Username/', async (req, res) => {
 });
 
 //READ
-app.get('/movies', (req, res) => {
-    res.status(200).json(movies);
+app.get('/movies', async (req, res) => {
+    await Movies.find()
+        .then((movies) => res.status(200).send(movies))
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
 //READ
