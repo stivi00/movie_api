@@ -134,19 +134,19 @@ app.post('/users/:Username/movies/:MovieID', async (req, res) => {
 });
 
 //DELETE
-app.delete('/users/:id/:movieTitle', (req, res) => {
-    const { id, movieTitle } = req.params;
-
-    let user = users.find((user) => user.id == id);
-
-    if (user) {
-        user.topMovies = user.topMovies.filter((title) => title !== movieTitle);
-        res.status(200).send(
-            `${movieTitle} has been removed from user ${id}'s top movies`
-        );
-    } else {
-        res.status(400).send('User not found');
-    }
+app.delete('/users/:Username/movies/:MovieID', async (req, res) => {
+    Users.findOneAndUpdate(
+        { Username: req.params.Username },
+        { $pull: { FavoriteMovies: req.params.MovieID } },
+        { new: true }
+    )
+        .then((updatedUser) => {
+            res.json(updatedUser);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
 });
 
 //DELETE
