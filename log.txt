@@ -148,3 +148,8 @@ Timestamp: Sun Aug 13 2023 16:58:43 GMT+0200 (Central European Summer Time)
 ::1 - - [23/Aug/2023:14:15:30 +0000] "PUT /users/1 HTTP/1.1" 400 14 "-" "PostmanRuntime/7.32.3"
 ::1 - - [23/Aug/2023:14:16:36 +0000] "GET /documentation.html HTTP/1.1" 200 5264 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
 ::1 - - [23/Aug/2023:14:16:36 +0000] "GET /styles.css HTTP/1.1" 304 - "http://localhost:8080/documentation.html" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"
+::1 - - [31/Aug/2023:20:05:48 +0000] "POST /users HTTP/1.1" 500 82 "-" "PostmanRuntime/7.32.3"
+::1 - - [31/Aug/2023:20:07:12 +0000] "POST /users/ HTTP/1.1" 500 82 "-" "PostmanRuntime/7.32.3"
+::1 - - [31/Aug/2023:20:12:55 +0000] "POST /users/ HTTP/1.1" 500 82 "-" "PostmanRuntime/7.32.3"
+::1 - - [31/Aug/2023:20:26:14 +0000] "POST /users/ HTTP/1.1" 500 55 "-" "PostmanRuntime/7.32.3"
+::1 - - [01/Sep/2023:06:36:22 +0000] "POST /users/ HTTP/1.1" 201 123 "-" "PostmanRuntime/7.32.3"

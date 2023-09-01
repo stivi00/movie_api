@@ -4,8 +4,8 @@ const express = require('express'),
     path = require('path'),
     bodyParser = require('body-parser'),
     uuid = require('uuid');
+mongoose = require('mongoose');
 
-const mongoose = require('mongoose');
 const Models = require('./models.js');
 
 const Movies = Models.Movie;
@@ -17,7 +17,8 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // not sure why this
 
-mongoose.connect('mongodb://localhost:27017/test', {
+//connect to the database
+mongoose.connect('mongodb://127.0.0.1:27017/test', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
@@ -105,11 +106,6 @@ let movies = [
     },
 ];
 
-let users = [
-    { id: 1, name: 'Mark', topMovies: [] },
-    { id: 2, name: 'John', topMovies: ['Goodfellas'] },
-];
-
 //creating a log file
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
     flags: 'a',
@@ -126,17 +122,40 @@ app.get('/', (req, res) => {
 });
 
 //CREATE
-app.post('/users', (req, res) => {
-    const newUser = req.body;
-
-    if (newUser.name) {
-        newUser.id = uuid.v4;
-        users.push(newUser);
-        res.status(201).json(newUser);
-    } else {
-        res.status(400).send('User name is required');
-    }
+app.post('/users', async (req, res) => {
+    await Users.findOne({ Username: req.body.Username })
+        .then((user) => {
+            if (user) {
+                return res
+                    .status(400)
+                    .send(req.body.Username + 'already exists');
+            } else {
+                Users.create({
+                    Username: req.body.Username,
+                    Password: req.body.Password,
+                    Email: req.body.Email,
+                    Birthday: req.body.Birthday,
+                })
+                    .then((user) => {
+                        res.status(201).json(user);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        res.status(500).send('Error ' + error);
+                    });
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send('Error ' + error);
+        });
 });
+
+//READ USERS
+
+// app.get('/users', async(req, res)=>{
+//     await
+// })
 
 //UPDATE
 app.put('/users/:id', (req, res) => {
