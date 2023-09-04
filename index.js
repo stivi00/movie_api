@@ -17,6 +17,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // not sure why this
 
+let auth = require('./auth')(app);
+
+const passport = require('passport');
+require('./passport');
+
 //connect to the database
 mongoose.connect('mongodb://127.0.0.1:27017/test', {
     useNewUrlParser: true,
@@ -93,27 +98,36 @@ app.get('/users/:Username', async (req, res) => {
 });
 
 //UPDATE
-app.put('/users/:Username', async (req, res) => {
-    await Users.findOneAndUpdate(
-        { Username: req.params.Username },
-        {
-            $set: {
-                Username: req.body.Username,
-                Password: req.body.Password,
-                Email: req.body.Email,
-                Birthday: req.body.Birthday,
+app.put(
+    '/users/:Username',
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
+        // CONDITION TO CHECK ADDED HERE
+        if (req.user.Username !== req.params.Username) {
+            return res.status(400).send('Permission denied');
+        }
+        // CONDITION ENDS
+        await Users.findOneAndUpdate(
+            { Username: req.params.Username },
+            {
+                $set: {
+                    Username: req.body.Username,
+                    Password: req.body.Password,
+                    Email: req.body.Email,
+                    Birthday: req.body.Birthday,
+                },
             },
-        },
-        { new: true }
-    )
-        .then((updatedUser) => {
-            res.json(updatedUser);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-        });
-});
+            { new: true }
+        ) // This line makes sure that the updated document is returned
+            .then((updatedUser) => {
+                res.json(updatedUser);
+            })
+            .catch((err) => {
+                console.log(err);
+                res.status(500).send('Error: ' + err);
+            });
+    }
+);
 
 //POST - add a movie to a user's fav list
 app.post('/users/:Username/movies/:MovieID', async (req, res) => {
@@ -166,14 +180,18 @@ app.delete('/users/:Username/', async (req, res) => {
 });
 
 //READ
-app.get('/movies', async (req, res) => {
-    await Movies.find()
-        .then((movies) => res.status(200).send(movies))
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-        });
-});
+app.get(
+    '/movies',
+    passport.authenticate('jwt', { session: false }),
+    async (req, res) => {
+        await Movies.find()
+            .then((movies) => res.status(200).send(movies))
+            .catch((err) => {
+                console.error(err);
+                res.status(500).send('Error: ' + err);
+            });
+    }
+);
 
 //READ
 app.get('/movies/:Title', async (req, res) => {
