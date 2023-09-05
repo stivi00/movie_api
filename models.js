@@ -29,6 +29,7 @@ userSchema.statics.hashPassword = (password) => {
     return bcrypt.hashSync(password, 10);
 };
 
+//dont use arrow function for validating password
 userSchema.statics.validatePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };

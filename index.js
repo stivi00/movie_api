@@ -67,16 +67,18 @@ app.get('/', (req, res) => {
 
 //CREATE
 app.post('/users', async (req, res) => {
-    await Users.findOne({ Username: req.body.Username })
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    await Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
         .then((user) => {
             if (user) {
+                //If the user is found, send a response that it already exists
                 return res
                     .status(400)
-                    .send(req.body.Username + 'already exists');
+                    .send(req.body.Username + ' already exists');
             } else {
                 Users.create({
                     Username: req.body.Username,
-                    Password: req.body.Password,
+                    Password: hashedPassword,
                     Email: req.body.Email,
                     Birthday: req.body.Birthday,
                 })
@@ -85,16 +87,15 @@ app.post('/users', async (req, res) => {
                     })
                     .catch((error) => {
                         console.error(error);
-                        res.status(500).send('Error ' + error);
+                        res.status(500).send('Error: ' + error);
                     });
             }
         })
         .catch((error) => {
             console.error(error);
-            res.status(500).send('Error ' + error);
+            res.status(500).send('Error: ' + error);
         });
 });
-
 //READ USERS
 app.get('/users', async (req, res) => {
     await Users.find()
