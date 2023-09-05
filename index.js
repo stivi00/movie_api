@@ -6,13 +6,15 @@ const express = require('express'),
     uuid = require('uuid');
 mongoose = require('mongoose');
 
+const { check, validationResult } = require('express-validator');
+const cors = require('cors');
+
 const Models = require('./models.js');
 
 const Movies = Models.Movie;
 const Users = Models.User;
 
 const app = express();
-const cors = require('cors');
 
 //middleware to use req.body
 app.use(bodyParser.json());
@@ -66,36 +68,48 @@ app.get('/', (req, res) => {
 });
 
 //CREATE
-app.post('/users', async (req, res) => {
-    let hashedPassword = Users.hashPassword(req.body.Password);
-    await Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
-        .then((user) => {
-            if (user) {
-                //If the user is found, send a response that it already exists
-                return res
-                    .status(400)
-                    .send(req.body.Username + ' already exists');
-            } else {
-                Users.create({
-                    Username: req.body.Username,
-                    Password: hashedPassword,
-                    Email: req.body.Email,
-                    Birthday: req.body.Birthday,
-                })
-                    .then((user) => {
-                        res.status(201).json(user);
+app.post(
+    '/users',
+    [
+        check('Username', 'Username is required').isLength({ min: 5 }),
+        check(
+            'Username',
+            'Username contains non alphanumeric characters - not allowed.'
+        ).isAlphanumeric(),
+        check('Password', 'Password is required').not().isEmpty(),
+        check('Email', 'Email does not appear to be valid').isEmail(),
+    ],
+    async (req, res) => {
+        let hashedPassword = Users.hashPassword(req.body.Password);
+        await Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
+            .then((user) => {
+                if (user) {
+                    //If the user is found, send a response that it already exists
+                    return res
+                        .status(400)
+                        .send(req.body.Username + ' already exists');
+                } else {
+                    Users.create({
+                        Username: req.body.Username,
+                        Password: hashedPassword,
+                        Email: req.body.Email,
+                        Birthday: req.body.Birthday,
                     })
-                    .catch((error) => {
-                        console.error(error);
-                        res.status(500).send('Error: ' + error);
-                    });
-            }
-        })
-        .catch((error) => {
-            console.error(error);
-            res.status(500).send('Error: ' + error);
-        });
-});
+                        .then((user) => {
+                            res.status(201).json(user);
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            res.status(500).send('Error: ' + error);
+                        });
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                res.status(500).send('Error: ' + error);
+            });
+    }
+);
 //READ USERS
 app.get(
     '/users',
