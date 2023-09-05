@@ -30,8 +30,8 @@ userSchema.statics.hashPassword = (password) => {
 };
 
 //dont use arrow function for validating password
-userSchema.statics.validatePassword = function (password) {
-    return bcrypt.compareSync(password, this.password);
+userSchema.methods.validatePassword = function (password) {
+    return bcrypt.compareSync(password, this.Password);
 };
 
 let Movie = mongoose.model('Movie', movieSchema);

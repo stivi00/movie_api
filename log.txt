@@ -246,3 +246,4 @@ Timestamp: Sun Aug 13 2023 16:58:43 GMT+0200 (Central European Summer Time)
 ::1 - - [05/Sep/2023:10:01:57 +0000] "DELETE /users/user2 HTTP/1.1" 200 22 "-" "PostmanRuntime/7.32.3"
 ::1 - - [05/Sep/2023:10:02:03 +0000] "DELETE /users/user5 HTTP/1.1" 200 22 "-" "PostmanRuntime/7.32.3"
 ::1 - - [05/Sep/2023:10:02:07 +0000] "GET /users HTTP/1.1" 201 2 "-" "PostmanRuntime/7.32.3"
+::1 - - [05/Sep/2023:10:06:37 +0000] "POST /users/ HTTP/1.1" 201 179 "-" "PostmanRuntime/7.32.3"
