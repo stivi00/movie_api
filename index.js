@@ -47,13 +47,10 @@ const passport = require('passport');
 require('./passport');
 
 //connect to the database
-mongoose.connect(
-    'mongodb+srv://stivisth:picasti70230@myflixdb.ntv09xn.mongodb.net/?retryWrites=true&w=majority',
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    }
-);
+mongoose.connect(process.env.CONNECTION_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 //creating a log file
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
