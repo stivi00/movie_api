@@ -47,10 +47,13 @@ const passport = require('passport');
 require('./passport');
 
 //connect to the database
-mongoose.connect('mongodb://127.0.0.1:27017/test', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+mongoose.connect(
+    'mongodb+srv://stivisth:picasti70230@myflixdb.ntv09xn.mongodb.net/?retryWrites=true&w=majority',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }
+);
 
 //creating a log file
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
@@ -309,5 +312,5 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0', () => {
-    console.log('Listening on Port ' + port);
+    console.log('Listening on Port ==> ' + port);
 });
