@@ -17,10 +17,9 @@ const app = express();
 
 //middleware to use req.body
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); // not sure why this
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// to allow acces from all domains
-app.use(cors());
+app.use(cors()); // to allow acces from all domains
 
 let auth = require('./auth')(app);
 
@@ -38,17 +37,55 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
     flags: 'a',
 });
 
-//morgan middleware setup
-app.use(morgan('combined', { stream: accessLogStream }));
+app.use(morgan('combined', { stream: accessLogStream })); //morgan middleware setup
 
 //serving static page
 app.use(express.static('public'));
 
+/**
+ * Get the homepage for the movie app.
+ *
+ * @function
+ * @name getHomePage
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {String} - A welcome message indicating the homepage for the movie app.
+ * @example
+ * // Example response:
+ * // "Hi, this is the homepage for the movie app... Welcome!"
+ */
 app.get('/', (req, res) => {
     res.send('Hi, this is homepage for the movie app... Welcome!');
 });
 
-//CREATE
+/**
+ * Create a new user.
+ *
+ * @function
+ * @name createUser
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object} - The created user.
+ * @throws {Object} 400 - Bad Request if the username already exists.
+ * @throws {Object} 500 - Internal Server Error if an error occurs during user creation.
+ * @example
+ * // Example request body:
+ * // {
+ * //   "Username": "exampleUser",
+ * //   "Password": "examplePassword",
+ * //   "Email": "example@email.com",
+ * //   "Birthday": "1990-01-01"
+ * // }
+ *
+ * // Example response:
+ * // {
+ * //   "_id": "5f90d1b63c99c900176c55cf",
+ * //   "Username": "exampleUser",
+ * //   "Password": "$2b$10$G1t/4xrPt28S9fFgzQYLru.8Ky/FgS.NL/1TjLGS/Bi",
+ * //   "Email": "example@email.com",
+ * //   "Birthday": "1990-01-01",
+ * // }
+ */
 app.post(
     '/users',
     [
@@ -91,7 +128,36 @@ app.post(
             });
     }
 );
-//READ USERS
+
+/**
+ * Get all users.
+ *
+ * @function
+ * @name getAllUsers
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object} - An array of user objects.
+ * @throws {Object} 500 - Internal Server Error if an error occurs during user retrieval.
+ * @example
+ * // Example response:
+ * // [
+ * //   {
+ * //     "_id": "5f90d1b63c99c900176c55cf",
+ * //     "Username": "exampleUser1",
+ * //     "Password": "$2b$10$G1t/4xrPt28S9fFgzQYLru.8Ky/FgS.NL/1TjLGS/Bi",
+ * //     "Email": "example1@email.com",
+ * //     "Birthday": "1990-01-01",
+ * //   },
+ * //   {
+ * //     "_id": "5f90d1b63c99c900176c55cg",
+ * //     "Username": "exampleUser2",
+ * //     "Password": "$2b$10$G1t/4xrPt28S9fFgzQYLru.8Ky/FgS.NL/1TjLGS/Bi",
+ * //     "Email": "example2@email.com",
+ * //     "Birthday": "1990-01-02",
+ * //   },
+ * //   // ... More user objects ...
+ * // ]
+ */
 app.get(
     '/users',
     passport.authenticate('jwt', { session: false }),
@@ -107,7 +173,26 @@ app.get(
     }
 );
 
-//READ ONE USER
+/**
+ * Get a user by username.
+ *
+ * @function
+ * @name getUserByUsername
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object} - The user object matching the specified username.
+ * @throws {Object} 404 - Not Found if the user with the given username is not found.
+ * @throws {Object} 500 - Internal Server Error if an error occurs during user retrieval.
+ * @example
+ * // Example response:
+ * // {
+ * //   "_id": "5f90d1b63c99c900176c55cf",
+ * //   "Username": "exampleUser",
+ * //   "Password": "$2b$10$G1t/4xrPt28S9fFgzQYLru.8Ky/FgS.NL/1TjLGS/Bi",
+ * //   "Email": "example@email.com",
+ * //   "Birthday": "1990-01-01",
+ * // }
+ */
 app.get(
     '/users/:Username',
     passport.authenticate('jwt', { session: false }),
@@ -123,7 +208,35 @@ app.get(
     }
 );
 
-//UPDATE
+/**
+ * Update a user's information by username.
+ *
+ * @function
+ * @name updateUserByUsername
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object} - The updated user object.
+ * @throws {Object} 400 - Bad Request if the requesting user doesn't have permission.
+ * @throws {Object} 404 - Not Found if the user with the given username is not found.
+ * @throws {Object} 500 - Internal Server Error if an error occurs during user update.
+ * @example
+ * // Example request body:
+ * // {
+ * //   "Username": "newUsername",
+ * //   "Password": "newPassword",
+ * //   "Email": "new@email.com",
+ * //   "Birthday": "1990-02-02"
+ * // }
+ *
+ * // Example response:
+ * // {
+ * //   "_id": "5f90d1b63c99c900176c55cf",
+ * //   "Username": "newUsername",
+ * //   "Password": "$2b$10$G1t/4xrPt28S9fFgzQYLru.8Ky/FgS.NL/1TjLGS/Bi",
+ * //   "Email": "new@email.com",
+ * //   "Birthday": "1990-02-02",
+ * // }
+ */
 app.put(
     '/users/:Username',
     passport.authenticate('jwt', { session: false }),
