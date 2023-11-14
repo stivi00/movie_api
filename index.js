@@ -268,7 +268,27 @@ app.put(
     }
 );
 
-//POST - add a movie to a user's fav list
+/**
+ * Add a movie to a user's list of favorite movies.
+ *
+ * @function
+ * @name addFavoriteMovie
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object} - The updated user object with the added movie to the list of favorites.
+ * @throws {Object} 404 - Not Found if the user with the given username is not found.
+ * @throws {Object} 500 - Internal Server Error if an error occurs during user update.
+ * @example
+ * // Example response:
+ * // {
+ * //   "_id": "5f90d1b63c99c900176c55cf",
+ * //   "Username": "exampleUser",
+ * //   "Password": "$2b$10$G1t/4xrPt28S9fFgzQYLru.8Ky/FgS.NL/1TjLGS/Bi",
+ * //   "Email": "example@email.com",
+ * //   "Birthday": "1990-01-01",
+ * //   "FavoriteMovies": ["5f90d1b63c99c900176c55cg", "5f90d1b63c99c900176c55ch"]
+ * // }
+ */
 app.post(
     '/users/:Username/movies/:MovieID',
     passport.authenticate('jwt', { session: false }),
@@ -290,7 +310,27 @@ app.post(
     }
 );
 
-//DELETE
+/**
+ * Remove a movie from a user's list of favorite movies.
+ *
+ * @function
+ * @name removeFavoriteMovie
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object} - The updated user object with the removed movie from the list of favorites.
+ * @throws {Object} 404 - Not Found if the user with the given username is not found.
+ * @throws {Object} 500 - Internal Server Error if an error occurs during user update.
+ * @example
+ * // Example response:
+ * // {
+ * //   "_id": "5f90d1b63c99c900176c55cf",
+ * //   "Username": "exampleUser",
+ * //   "Password": "$2b$10$G1t/4xrPt28S9fFgzQYLru.8Ky/FgS.NL/1TjLGS/Bi",
+ * //   "Email": "example@email.com",
+ * //   "Birthday": "1990-01-01",
+ * //   "FavoriteMovies": ["5f90d1b63c99c900176c55ch"]
+ * // }
+ */
 app.delete(
     '/users/:Username/movies/:MovieID',
     passport.authenticate('jwt', { session: false }),
@@ -310,7 +350,20 @@ app.delete(
     }
 );
 
-//DELETE
+/**
+ * Delete a user by username.
+ *
+ * @function
+ * @name deleteUserByUsername
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {String} - Confirmation message indicating the deletion of the user.
+ * @throws {Object} 400 - Bad Request if the user with the given username is not found.
+ * @throws {Object} 500 - Internal Server Error if an error occurs during user deletion.
+ * @example
+ * // Example response:
+ * // "exampleUser was deleted."
+ */
 app.delete(
     '/users/:Username/',
     passport.authenticate('jwt', { session: false }),
@@ -332,7 +385,30 @@ app.delete(
     }
 );
 
-//READ
+/**
+ * Get a list of all movies.
+ *
+ * @function
+ * @name getAllMovies
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object} - An array of movie objects.
+ * @throws {Object} 500 - Internal Server Error if an error occurs during movie retrieval.
+ * @example
+ * // Example response:
+ * // [
+ * //   {
+ * //     "_id": "5f90d1b63c99c900176c55cg",
+ * //     "Title": "Example Movie",
+ * //     "Description": "A brief description of the movie.",
+ * //     "Genre": ["Action", "Adventure"],
+ * //     "Director": "John Doe",
+ * //     "ReleaseYear": 2022,
+ * //     "ImagePath": "path/to/image.jpg"
+ * //   },
+ * //   // ... More movie objects ...
+ * // ]
+ */
 app.get(
     '/movies',
     passport.authenticate('jwt', { session: false }),
@@ -346,7 +422,28 @@ app.get(
     }
 );
 
-//READ
+/**
+ * Get a movie by title.
+ *
+ * @function
+ * @name getMovieByTitle
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object} - The movie object matching the specified title.
+ * @throws {Object} 404 - Not Found if the movie with the given title is not found.
+ * @throws {Object} 500 - Internal Server Error if an error occurs during movie retrieval.
+ * @example
+ * // Example response:
+ * // {
+ * //   "_id": "5f90d1b63c99c900176c55cg",
+ * //   "Title": "Example Movie",
+ * //   "Description": "A brief description of the movie.",
+ * //   "Genre": ["Action", "Adventure"],
+ * //   "Director": "John Doe",
+ * //   "ReleaseYear": 2022,
+ * //   "ImagePath": "path/to/image.jpg"
+ * // }
+ */
 app.get(
     '/movies/:Title',
     passport.authenticate('jwt', { session: false }),
@@ -362,7 +459,25 @@ app.get(
     }
 );
 
-//READ
+/**
+ * Get movies by director name.
+ *
+ * @function
+ * @name getMoviesByDirector
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object} - The director information and an array of movies directed by the specified director.
+ * @throws {Object} 404 - Not Found if no movies are found for the given director.
+ * @throws {Object} 500 - Internal Server Error if an error occurs during movie retrieval.
+ * @example
+ * // Example response:
+ * // {
+ * //   "Name": "John Doe",
+ * //   "Bio": "A brief biography of the director.",
+ * //   "BirthYear": 1980,
+ * //   "DeathYear": null
+ * // }
+ */
 app.get(
     '/movies/directors/:Director',
     passport.authenticate('jwt', { session: false }),
@@ -378,7 +493,42 @@ app.get(
     }
 );
 
-//READ
+/**
+ * Get movies by genre name.
+ *
+ * @function
+ * @name getMoviesByGenre
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object} - The genre information and an array of movies belonging to the specified genre.
+ * @throws {Object} 404 - Not Found if no movies are found for the given genre.
+ * @throws {Object} 500 - Internal Server Error if an error occurs during movie retrieval.
+ * @example
+ * // Example response:
+ * // {
+ * //   "Name": "Action",
+ * //   "Description": "A brief description of the genre.",
+ * //   "Movies": [
+ * //     {
+ * //       "_id": "5f90d1b63c99c900176c55cg",
+ * //       "Title": "Example Movie 1",
+ * //       "Description": "A brief description of the movie.",
+ * //       "Director": "John Doe",
+ * //       "Genre": "Drama",
+ * //       "ImagePath": "path/to/image1.jpg"
+ * //     },
+ * //     {
+ * //       "_id": "5f90d1b63c99c900176c55ch",
+ * //       "Title": "Example Movie 2",
+ * //       "Description": "A brief description of the movie.",
+ * //       "Director": "Jane Doe",
+ * //       "Genre": "Action",
+ * //       "ImagePath": "path/to/image2.jpg"
+ * //     },
+ * //     // ... More movie objects ...
+ * //   ]
+ * // }
+ */
 app.get(
     '/movies/genres/:genreName',
     passport.authenticate('jwt', { session: false }),
@@ -395,7 +545,20 @@ app.get(
     }
 );
 
-//error handling
+/**
+ * Express middleware for handling errors.
+ *
+ * @function
+ * @name errorHandlerMiddleware
+ * @param {Object} err - The error object.
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next function.
+ * @returns {Object} - Response with a 500 status code and an error message.
+ * @example
+ * // Example usage in Express application:
+ * // app.use(errorHandlerMiddleware);
+ */
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Error has occurred...');
